@@ -63,7 +63,7 @@ class AltmetricsClient(object):
         res, content = h.request(url, 'GET', headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
-        return json.loads(content.decode('utf-8'))
+        return content.decode('utf-8')
 
     def register_dois(self, data):
         h = httplib2.Http()
