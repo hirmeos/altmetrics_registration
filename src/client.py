@@ -59,16 +59,17 @@ class AltmetricsClient(object):
     def get_token(self, url, email, passwd):
         h = httplib2.Http()
         auth = base64.b64encode(bytes('%s:%s' % (email, passwd), 'utf-8'))
-        headers = {'Authorization': 'Basic %s' % (auth)}
+        headers = {'Authorization': 'Basic %s' % (auth.decode('utf-8'))}
         res, content = h.request(url, 'GET', headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
-        return json.loads(content.decode('utf-8'))
+        return content.decode('utf-8')
 
     def register_dois(self, data):
         h = httplib2.Http()
-        res, content = h.request(ALTMETRICS_ENDP, 'POST', data,
-                                 headers=self.auth_headers)
+        headers = {**{'content-type': 'application/json'}, **self.auth_headers}
+        res, content = h.request(ALTMETRICS_ENDP, 'POST', json.dumps(data),
+                                 headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
         return json.loads(content.decode('utf-8'))

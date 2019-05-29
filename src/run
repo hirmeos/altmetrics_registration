@@ -28,7 +28,8 @@ def run():
     dois = map_dois(data)
 
     alt_api = AltmetricsClient()
-    alt_api.register_dois(dois)
+    for doi in dois:
+        alt_api.register_dois([doi])
 
 
 if __name__ == '__main__':
