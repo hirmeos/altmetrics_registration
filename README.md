@@ -7,9 +7,8 @@ This software may be useful to people who have set up an Identifier Translation 
 
 ## Setup
 ### Requirements
-An instance of [hirmeos/identifier_translation_service][1] - you must first have a running version of this API.
-
-An [altmetrics user account][4].
+- An instance of [hirmeos/identifier_translation_service][1] - you must first have a running version of this API.
+- An [altmetrics user account][4].
 
 ## Run via crontab
 ```
@@ -17,6 +16,6 @@ An [altmetrics user account][4].
 ```
 
 [1]: https://github.com/hirmeos/identifier_translation_service "Identifier Translation Service"
-[1]: https://github.com/hirmeos/altmetrics "Altmetrics Service"
+[2]: https://github.com/hirmeos/altmetrics "Altmetrics Service"
 [3]: https://metrics.operas-eu.org/docs/getting-started "Metrics docs"
 [4]: https://docs.metrics.ubiquity.press/metrics/index.html "Almetrics user account"
