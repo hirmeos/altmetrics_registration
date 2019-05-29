@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from client import IdentifiersClient, AltmetricsClient
+
+
+def map_dois(data):
+    dois = []
+    for work in data:
+        urls = []
+        doi = ''
+        for uri in work['URI']:
+            is_url = uri['URI_parts']['scheme'] in ('http', 'https')
+            is_doi = uri['URI_parts']['scheme'] == 'info:doi'
+            if is_url:
+                urls.append(uri['URI'])
+            elif is_doi:
+                doi = uri['URI_parts']['value']
+            else:
+                continue
+        if doi:
+            dois.append({"doi": doi, "url": urls})
+    return dois
+
+
+def run():
+    api = IdentifiersClient()
+    data = api.get_all_works()
+    dois = map_dois(data)
+
+    alt_api = AltmetricsClient()
+    alt_api.register_dois(dois)
+
+
+if __name__ == '__main__':
+    run()
