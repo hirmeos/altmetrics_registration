@@ -60,7 +60,7 @@ class AltmetricsClient(object):
         h = httplib2.Http()
         auth = base64.b64encode(bytes('%s:%s' % (email, passwd), 'utf-8'))
         headers = {'Authorization': 'Basic %s' % (auth)}
-        res, content = h.request(url, 'GET', headers)
+        res, content = h.request(url, 'GET', headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
         return json.loads(content.decode('utf-8'))
