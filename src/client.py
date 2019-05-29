@@ -59,7 +59,7 @@ class AltmetricsClient(object):
     def get_token(self, url, email, passwd):
         h = httplib2.Http()
         auth = base64.b64encode(bytes('%s:%s' % (email, passwd), 'utf-8'))
-        headers = {'Authorization': 'Basic %s' % (auth)}
+        headers = {'Authorization': 'Basic %s' % (auth.decode('utf-8'))}
         res, content = h.request(url, 'GET', headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
