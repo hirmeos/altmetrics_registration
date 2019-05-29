@@ -67,7 +67,7 @@ class AltmetricsClient(object):
 
     def register_dois(self, data):
         h = httplib2.Http()
-        res, content = h.request(ALTMETRICS_ENDP, 'POST', data,
+        res, content = h.request(ALTMETRICS_ENDP, 'POST', json.dumps(data),
                                  headers=self.auth_headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
