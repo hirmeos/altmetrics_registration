@@ -6,9 +6,11 @@ import json
 import base64
 import httplib2
 
-URI_API_USER = os.environ['URI_API_USER']
-URI_API_PASS = os.environ['URI_API_PASS']
-AUTH_API_ENDP = os.environ['AUTH_API_ENDP']
+JWT_DISABLED = os.environ['JWT_DISABLED'] in ('True', 'true')
+if not JWT_DISABLED:
+    URI_API_USER = os.environ['URI_API_USER']
+    URI_API_PASS = os.environ['URI_API_PASS']
+    AUTH_API_ENDP = os.environ['AUTH_API_ENDP']
 URI_API_WORKS = os.environ['URI_API_WORKS']
 ALTMETRICS_AUTH_ENDP = os.environ['ALTMETRICS_AUTH_ENDP']
 ALTMETRICS_ENDP = os.environ['ALTMETRICS_ENDP']
@@ -20,9 +22,12 @@ class IdentifiersClient(object):
     """Single entry point to the translation service API"""
 
     def __init__(self):
-        self.token = self.get_token(AUTH_API_ENDP, URI_API_USER, URI_API_PASS)
-        self.auth = 'Bearer ' + self.token
-        self.auth_headers = {'Authorization': self.auth}
+        self.token = ''
+        if not JWT_DISABLED:
+            self.token = self.get_token(AUTH_API_ENDP, URI_API_USER,
+                                        URI_API_PASS)
+            self.auth = 'Bearer ' + self.token
+            self.auth_headers = {'Authorization': self.auth}
 
     def get_token(self, url, email, passwd):
         h = httplib2.Http()
@@ -35,7 +40,8 @@ class IdentifiersClient(object):
 
     def request_identifiers(self, url):
         h = httplib2.Http()
-        res, content = h.request(url, 'GET', headers=self.auth_headers)
+        headers = {} if JWT_DISABLED else self.auth_headers
+        res, content = h.request(url, 'GET', headers=headers)
         if res.status != 200:
             raise ValueError(content.decode('utf-8'))
         return json.loads(content.decode('utf-8'))['data']
